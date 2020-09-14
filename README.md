@@ -1,4 +1,5 @@
-SAMD21 32bit timer
+SAMD21 32bit timer.
+
 This arduino program will enable a 32bit timer on a SAMD21 by combining TC Counters 4 & 5.
 The SAMD21 is configured to load the CC0 and CC1 with pulse and period measurements from a single pin.
 My purpose for creating this was to trim oscillators and measure longer durations.
