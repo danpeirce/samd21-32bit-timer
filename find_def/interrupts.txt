@@ -1,0 +1,4 @@
+#define interrupts() __enable_irq()
+#define noInterrupts() __disable_irq()
+
+from C:\Users\newdp\AppData\Local\Arduino15\packages\adafruit\hardware\samd\1.7.13\cores\arduino\Arduino.h

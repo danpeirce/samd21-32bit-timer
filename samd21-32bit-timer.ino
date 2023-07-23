@@ -74,7 +74,7 @@ void setup()
   REG_TC4_INTENSET = TC_INTENSET_MC1 |           // Enable compare channel 1 (CC1) interrupts
                      TC_INTENSET_MC0;            // Enable compare channel 0 (CC0) interrupts
  
-  REG_TC4_CTRLA |= TC_CTRLA_PRESCALER_DIV1 |     // Set prescaler to 1, 48MHz/1 = 48MHz
+  REG_TC4_CTRLA |= TC_CTRLA_PRESCALER_DIV16 |     // Set prescaler to 16, 48MHz/16 = 3MHz
                    TC_CTRLA_MODE_COUNT32   |     // Set the TC4 timer to 32-bit mode in conjuction with timer TC5
                    TC_CTRLA_ENABLE;              // Enable TC4
   while (TC4->COUNT32.STATUS.bit.SYNCBUSY);      // Wait for synchronization
@@ -88,13 +88,13 @@ void loop()
     period     = isrPeriod;                   
     pulsewidth = isrPulsewidth;
     interrupts();
-    SerialUSB.print("period=");                  // Output the results in nanoseconds
-    SerialUSB.println(period);                    
+    SerialUSB.print("period=");                  // Output the results in microseconds
+    SerialUSB.println( (period+1)/3 );                    
     SerialUSB.print("pulsewidth=");
-    SerialUSB.println(pulsewidth);
+    SerialUSB.println( (pulsewidth+1)/3 );
     periodComplete = false;                      // Start a new period
   }
-  delay(1000);                                   // completely optional, I just want the first reading
+  //delay(1000);                                   // completely optional, I just want the first reading
 }
 
 void TC4_Handler()                               // Interrupt Service Routine (ISR) for timer TC4
@@ -105,7 +105,7 @@ void TC4_Handler()                               // Interrupt Service Routine (I
     REG_TC4_READREQ = TC_READREQ_RREQ |                    // Enable a read request
                       TC_READREQ_ADDR(0x18);               // Offset address of the CC0 register
     while (TC4->COUNT32.STATUS.bit.SYNCBUSY);              // Wait for (read) synchronization
-    isrPeriod = REG_TC4_COUNT32_CC0 * (1000.0 / 48.0);     // Copy the period, adjusted to nanoseconds
+    isrPeriod = REG_TC4_COUNT32_CC0 ;               // Copy the period, adjusted to 3*microseconds
     periodComplete = true;                                 // Indicate that the period is complete
   }
 
@@ -115,6 +115,6 @@ void TC4_Handler()                               // Interrupt Service Routine (I
     REG_TC4_READREQ = TC_READREQ_RREQ |                    // Enable a read request
                       TC_READREQ_ADDR(0x1A);               // Offset address of the CC1 register
     while (TC4->COUNT32.STATUS.bit.SYNCBUSY);              // Wait for (read) synchronization
-    isrPulsewidth = REG_TC4_COUNT32_CC1 * (1000.0 / 48.0); // Copy the pulse-width, adjusted to nanoseconds
+    isrPulsewidth = REG_TC4_COUNT32_CC1;               // Copy the pulse-width, adjusted to 3*microseconds
   }
 }
