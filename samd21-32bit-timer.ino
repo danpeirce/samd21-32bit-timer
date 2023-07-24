@@ -8,7 +8,7 @@ uint32_t period;
 uint32_t pulsewidth;
 
 #define SerialUSB Serial // this is needed for trinket m0
-#define PIN 7            // 7 is PB9 on XIAO, 2 is PA9 on trinket m0, both have pin #9 which is odd 
+#define PIN 2            // 7 is PB9 on XIAO, 2 is PA9 on trinket m0, both have pin #9 which is odd 
 
 void setup()
 {
@@ -74,7 +74,7 @@ void setup()
   REG_TC4_INTENSET = TC_INTENSET_MC1 |           // Enable compare channel 1 (CC1) interrupts
                      TC_INTENSET_MC0;            // Enable compare channel 0 (CC0) interrupts
  
-  REG_TC4_CTRLA |= TC_CTRLA_PRESCALER_DIV16 |     // Set prescaler to 16, 48MHz/16 = 3MHz
+  REG_TC4_CTRLA |= TC_CTRLA_PRESCALER_DIV64 |     // Set prescaler to 16, 48MHz/64 = 0.75MHz
                    TC_CTRLA_MODE_COUNT32   |     // Set the TC4 timer to 32-bit mode in conjuction with timer TC5
                    TC_CTRLA_ENABLE;              // Enable TC4
   while (TC4->COUNT32.STATUS.bit.SYNCBUSY);      // Wait for synchronization
@@ -89,9 +89,9 @@ void loop()
     pulsewidth = isrPulsewidth;
     interrupts();
     SerialUSB.print("period=");                  // Output the results in microseconds
-    SerialUSB.println( (period+1)/3 );                    
+    SerialUSB.println( (period)/3.0*4/1000 );                    
     SerialUSB.print("pulsewidth=");
-    SerialUSB.println( (pulsewidth+1)/3 );
+    SerialUSB.println( (pulsewidth)/3.0*4/1000 );
     periodComplete = false;                      // Start a new period
   }
   //delay(1000);                                   // completely optional, I just want the first reading
