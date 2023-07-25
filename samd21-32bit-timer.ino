@@ -1,7 +1,7 @@
 // Parts of this taken from https://forum.arduino.cc/index.php?topic=658058.0
 // Parts of this taken from https://forum.arduino.cc/index.php?topic=425385.0
 // Setup TC4/TC5 to capture pulse-width and period
-volatile boolean periodComplete;
+volatile boolean periodComplete, outlevel=0;
 volatile uint32_t isrPeriod;
 volatile uint32_t isrPulsewidth;
 uint32_t period;
@@ -10,8 +10,12 @@ uint32_t pulsewidth;
 #define SerialUSB Serial // this is needed for trinket m0
 #define PIN 2            // 7 is PB9 on XIAO, 2 is PA9 on trinket m0, both have pin #9 which is odd 
 
+
 void setup()
 {
+  pinMode(1, OUTPUT);
+  digitalWrite(1, outlevel);
+  Serial1.begin(1200);
   SerialUSB.begin(115200);                       // Send data back on the native port
   while(!SerialUSB);                             // Wait for the SerialUSB port to be ready
  
@@ -89,12 +93,18 @@ void loop()
     pulsewidth = isrPulsewidth;
     interrupts();
     SerialUSB.print("period=");                  // Output the results in microseconds
-    SerialUSB.println( (period)/3.0*4/1000 );                    
+    SerialUSB.println( (period)/3*4 );                    
     SerialUSB.print("pulsewidth=");
-    SerialUSB.println( (pulsewidth)/3.0*4/1000 );
+    SerialUSB.println( (pulsewidth)/3*4 );
+    SerialUSB.println( period/3*4 - pulsewidth/3*4 );
     periodComplete = false;                      // Start a new period
   }
-  //delay(1000);                                   // completely optional, I just want the first reading
+  if (SerialUSB.available()) {        // If anything comes in Serial (USB),
+    Serial1.write(SerialUSB.read());  // read it and send it out Serial1 (pins 0 & 1)
+    //digitalWrite(1, outlevel = !outlevel);
+    //if(outlevel) SerialUSB.write('1');
+    //else SerialUSB.write('0');
+  }
 }
 
 void TC4_Handler()                               // Interrupt Service Routine (ISR) for timer TC4
