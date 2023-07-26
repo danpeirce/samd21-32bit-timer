@@ -11,6 +11,30 @@ The SAMD21 is configured to load the CC0 and CC1 with pulse and period measureme
 * Not necessarily interested in both period on pulse width. Down the road will look at other scenarios.
 * Future modifications might be used to replace https://github.com/danpeirce/photogate-box-ssd1306term 
 
+## Testing on the Seeed XIAO
+
+* See https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html
+    * and https://wiki.seeedstudio.com/Seeeduino-XIAO/#software
+* Alternate source https://dronebotworkshop.com/seeeduino-xiao-intro/
+
+### Pros and Cons of Seeed XIAO
+
+#### Pros
+
+* More pins than the Trinket M0
+* Lower price than Trinket M0 
+
+#### Cons
+
+* No reset button (must short pads)
+* USB C connector
+    * I have preference for USB microB connector as we have cables and they are less expensive.
+
+### Example Output
+
+Simple test:
+
+![](img/testPulseXIAO.png)
 
 ## Original Section from Original Repo
 
