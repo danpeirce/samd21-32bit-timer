@@ -8,14 +8,14 @@ uint32_t period;
 uint32_t pulsewidth;
 
 #define SerialUSB Serial // this is needed for trinket m0
-#define PIN 2            // 7 is PB9 on XIAO, 2 is PA9 on trinket m0, both have pin #9 which is odd 
+#define PIN 7            // 7 is PB9 on XIAO, 2 is PA9 on trinket m0, both have pin #9 which is odd 
 
 
 void setup()
 {
   pinMode(1, OUTPUT);
   digitalWrite(1, outlevel);
-  Serial1.begin(1200);
+  //Serial1.begin(1200);
   SerialUSB.begin(115200);                       // Send data back on the native port
   while(!SerialUSB);                             // Wait for the SerialUSB port to be ready
  
@@ -100,10 +100,10 @@ void loop()
     periodComplete = false;                      // Start a new period
   }
   if (SerialUSB.available()) {        // If anything comes in Serial (USB),
-    Serial1.write(SerialUSB.read());  // read it and send it out Serial1 (pins 0 & 1)
-    //digitalWrite(1, outlevel = !outlevel);
-    //if(outlevel) SerialUSB.write('1');
-    //else SerialUSB.write('0');
+    SerialUSB.write(SerialUSB.read());  // read it and send it out Serial1 (pins 0 & 1)
+    digitalWrite(1, outlevel = !outlevel);
+    if(outlevel) SerialUSB.write('1');
+    else SerialUSB.write('0');
   }
 }
 
