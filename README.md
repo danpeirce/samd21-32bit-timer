@@ -17,6 +17,9 @@ The SAMD21 is configured to load the CC0 and CC1 with pulse and period measureme
     * and https://wiki.seeedstudio.com/Seeeduino-XIAO/#software
 * Alternate source https://dronebotworkshop.com/seeeduino-xiao-intro/
 
+Connected a wire from pin D1 to D7 for testing. Plan is to attach photogate to D7 in which case it would not be connected to
+D1.
+
 ### Pros and Cons of Seeed XIAO
 
 #### Pros
