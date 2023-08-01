@@ -6,6 +6,7 @@ volatile uint32_t isrPeriod;
 volatile uint32_t isrPulsewidth;
 uint32_t period;
 uint32_t pulsewidth;
+boolean reSet=1;
 
 #define SerialUSB Serial // this is needed for trinket m0
 #define PIN 7            // 7 is PB9 on XIAO, 2 is PA9 on trinket m0, both have pin #9 which is odd 
@@ -13,8 +14,8 @@ uint32_t pulsewidth;
 
 void setup()
 {
-  pinMode(1, OUTPUT);
-  digitalWrite(1, outlevel);
+  //pinMode(1, OUTPUT);
+  //digitalWrite(1, outlevel);
   //Serial1.begin(1200);
   SerialUSB.begin(115200);                       // Send data back on the native port
   while(!SerialUSB);                             // Wait for the SerialUSB port to be ready
@@ -47,7 +48,8 @@ void setup()
   PORT->Group[g_APinDescription[PIN].ulPort].PMUX[g_APinDescription[PIN].ulPin >> 1].reg |= PORT_PMUX_PMUXO_A;
 
   EIC->EVCTRL.reg     = EIC_EVCTRL_EXTINTEO9;                           // Enable event output on external interr
-  EIC->CONFIG[1].reg  = EIC_CONFIG_SENSE1_HIGH;                         // Set event detecting a high (config 1, #1 is 9
+  //EIC->CONFIG[1].reg  = EIC_CONFIG_SENSE1_HIGH;                         // Set event detecting a high (config 1, #1 is 9
+  EIC->CONFIG[1].reg  = EIC_CONFIG_SENSE1_LOW;                         // Set event detecting a high (config 1, #1 is 9
   EIC->INTENCLR.reg   = EIC_INTENCLR_EXTINT9;                           // Clear the interrupt flag on channel 9
   EIC->CTRL.reg       = EIC_CTRL_ENABLE;                                // Enable EIC peripheral
   while (EIC->STATUS.bit.SYNCBUSY);                                     // Wait for synchronization
@@ -92,19 +94,17 @@ void loop()
     period     = isrPeriod;                   
     pulsewidth = isrPulsewidth;
     interrupts();
-    SerialUSB.print("period=");                  // Output the results in microseconds
-    SerialUSB.println( (period)/3*4 );                    
-    SerialUSB.print("pulsewidth=");
-    SerialUSB.println( (pulsewidth)/3*4 );
-    SerialUSB.println( period/3*4 - pulsewidth/3*4 );
+    //if(!reSet)  {
+      //SerialUSB.print("per=");                  // Output the results in microseconds
+      //SerialUSB.println( (period)/3*4/1000.0 );                    
+      SerialUSB.print("wid=");
+      //SerialUSB.println( (pulsewidth)/3*4/1000.0 );
+      SerialUSB.println( (period-pulsewidth)/3*4/1000.0 );
+    //}
     periodComplete = false;                      // Start a new period
+    reSet = 0;
   }
-  if (SerialUSB.available()) {        // If anything comes in Serial (USB),
-    SerialUSB.write(SerialUSB.read());  // read it and send it out Serial1 (pins 0 & 1)
-    digitalWrite(1, outlevel = !outlevel);
-    if(outlevel) SerialUSB.write('1');
-    else SerialUSB.write('0');
-  }
+
 }
 
 void TC4_Handler()                               // Interrupt Service Routine (ISR) for timer TC4
