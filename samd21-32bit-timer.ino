@@ -48,8 +48,8 @@ void setup()
   PORT->Group[g_APinDescription[PIN].ulPort].PMUX[g_APinDescription[PIN].ulPin >> 1].reg |= PORT_PMUX_PMUXO_A;
 
   EIC->EVCTRL.reg     = EIC_EVCTRL_EXTINTEO9;                           // Enable event output on external interr
-  //EIC->CONFIG[1].reg  = EIC_CONFIG_SENSE1_HIGH;                         // Set event detecting a high (config 1, #1 is 9
-  EIC->CONFIG[1].reg  = EIC_CONFIG_SENSE1_LOW;                         // Set event detecting a high (config 1, #1 is 9
+  EIC->CONFIG[1].reg  = EIC_CONFIG_SENSE1_HIGH;                         // Set event detecting a high (config 1, #1 is 9
+  //EIC->CONFIG[1].reg  = EIC_CONFIG_SENSE1_LOW;                         // Set event detecting a high (config 1, #1 is 9
   EIC->INTENCLR.reg   = EIC_INTENCLR_EXTINT9;                           // Clear the interrupt flag on channel 9
   EIC->CTRL.reg       = EIC_CTRL_ENABLE;                                // Enable EIC peripheral
   while (EIC->STATUS.bit.SYNCBUSY);                                     // Wait for synchronization
