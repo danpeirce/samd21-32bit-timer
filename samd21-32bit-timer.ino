@@ -94,13 +94,13 @@ void loop()
     period     = isrPeriod;                   
     pulsewidth = isrPulsewidth;
     interrupts();
-    //if(!reSet)  {
-      //SerialUSB.print("per=");                  // Output the results in microseconds
-      //SerialUSB.println( (period)/3*4/1000.0 );                    
-      SerialUSB.print("wid=");
+    if(!reSet)  {
+      SerialUSB.print("per=");                  // Output the results in microseconds
+      SerialUSB.println( (period)/3*4/1000.0 );                    
+      //SerialUSB.print("wid=");
       //SerialUSB.println( (pulsewidth)/3*4/1000.0 );
-      SerialUSB.println( (period-pulsewidth)/3*4/1000.0 );
-    //}
+      //SerialUSB.println( (period-pulsewidth)/3*4/1000.0 );
+    }
     periodComplete = false;                      // Start a new period
     reSet = 0;
   }
