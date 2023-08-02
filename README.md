@@ -11,14 +11,28 @@ The SAMD21 is configured to load the CC0 and CC1 with pulse and period measureme
 * Not necessarily interested in both period on pulse width. Down the road will look at other scenarios.
 * Future modifications might be used to replace https://github.com/danpeirce/photogate-box-ssd1306term 
 
+In this branch 
+
+* a Grove-16x2 (black on Yellow) LCD is used.
+* configured for period measurement only.
+
+![](img/period_lcd.png)
+
+## Circuit
+
+* Seeeduino Xiao microcontroller board
+* BS170 MOSFET for level shift and inversion
+* 10 Kohm pullup resistor 
+* Grove-16x2 (black on Yellow) LCD
+
+Considering adding a 4x3 membrane keypad for configuration selection.
+
+
 ## Testing on the Seeed XIAO
 
 * See https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html
     * and https://wiki.seeedstudio.com/Seeeduino-XIAO/#software
 * Alternate source https://dronebotworkshop.com/seeeduino-xiao-intro/
-
-Connected a wire from pin D1 to D7 for testing. Plan is to attach photogate to D7 in which case it would not be connected to
-D1.
 
 ### Pros and Cons of Seeed XIAO
 

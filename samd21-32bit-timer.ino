@@ -8,18 +8,28 @@ uint32_t period;
 uint32_t pulsewidth;
 boolean reSet=1;
 
-#define SerialUSB Serial // this is needed for trinket m0
+//#define SerialUSB Serial // this is needed for trinket m0
 #define PIN 7            // 7 is PB9 on XIAO, 2 is PA9 on trinket m0, both have pin #9 which is odd 
 
+#include <Wire.h>
+#include "rgb_lcd.h"
+
+rgb_lcd lcd;
+
+const int numRows = 2;
+const int numCols = 16;
 
 void setup()
 {
   //pinMode(1, OUTPUT);
   //digitalWrite(1, outlevel);
   //Serial1.begin(1200);
-  SerialUSB.begin(115200);                       // Send data back on the native port
-  while(!SerialUSB);                             // Wait for the SerialUSB port to be ready
- 
+  //SerialUSB.begin(115200);                       // Send data back on the native port
+  //while(!SerialUSB);                             // Wait for the SerialUSB port to be ready
+  // set up the LCD's number of columns and rows:
+  lcd.begin(numCols,numRows);
+  lcd.setCursor(0,0);
+  lcd.print("period (ms) =");
   REG_PM_APBCMASK |= PM_APBCMASK_EVSYS |         // Switch on the event system peripheral
                      PM_APBCMASK_TC4   |         // Switch on the TC4 peripheral
                      PM_APBCMASK_TC5;            // Switch on the TC5 peripheral
@@ -95,8 +105,9 @@ void loop()
     pulsewidth = isrPulsewidth;
     interrupts();
     if(!reSet)  {
-      SerialUSB.print("per=");                  // Output the results in microseconds
-      SerialUSB.println( (period)/3*4/1000.0 );                    
+      //SerialUSB.print("per=");                  // Output the results in microseconds
+      lcd.setCursor(0,1);
+      lcd.print( (period)/3*4/1000.0 );                    
       //SerialUSB.print("wid=");
       //SerialUSB.println( (pulsewidth)/3*4/1000.0 );
       //SerialUSB.println( (period-pulsewidth)/3*4/1000.0 );
