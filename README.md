@@ -5,10 +5,11 @@ The SAMD21 is configured to load the CC0 and CC1 with pulse and period measureme
 
 * Additional original description in the next subsection. 
 * This fork intended to introduce changes as follows:
-    * Output shall be in microseconds rather than nanoseconds
-	* avoid floating point calculations (integer calculations are faster)
+    * Output shall be in milliseconds rather than nanoseconds
 	* remove all calculations from interrupt handler function
-* Not necessarily interested in both period on pulse width. Down the road will look at other scenarios.
+	* Will use I2C LCD Display rather than serial monitor. Goal is to build a stand alone timer that
+	  does not require a computer connection.
+* Considering adding keypad to choose mode (pulse, period or pendulum.
 * Future modifications might be used to replace https://github.com/danpeirce/photogate-box-ssd1306term 
 
 In this branch 
