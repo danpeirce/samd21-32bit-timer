@@ -19,6 +19,10 @@ In this branch
 
 ![](img/period_lcd.png)
 
+* Alternate cables
+
+![](img/period_lcd_2.png)
+
 ## Circuit
 
 * Seeeduino Xiao microcontroller board
